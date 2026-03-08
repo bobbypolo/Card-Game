@@ -1,0 +1,84 @@
+# BEGIN ADE MANAGED — do not edit this section
+__pycache__/
+*.pyc
+.claude/errors/*.json
+.claude/errors/*.jsonl
+research/
+.claude/settings.local.json
+*.log
+.env
+.DS_Store
+.claude/ralph-state.json
+.claude/ralph-sprint-state.json
+.claude/worktrees/
+.claude/docs/verification-log.md
+.claude/docs/verification-log.jsonl
+.claude/verification-log.jsonl
+.claude/docs/progress.md
+.claude/.workflow-state.json
+# Prevent nested .claude dirs from accidental CWD-drift hook runs
+.claude/hooks/.claude/
+.mcp.json
+.claude/.file-manifest.json
+.claude/runtime/
+# END ADE MANAGED
+
+# Project-specific patterns below this line
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+build/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+vendor/
+*.test
+
+# React Native / Expo
+.expo/
+ios/Pods/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Environment
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+
+# Infrastructure
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# Coverage
+coverage/
+*.lcov
+htmlcov/
+
+# Temporary
+tmp/
+temp/
+*.tmp

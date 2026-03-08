@@ -1,0 +1,103 @@
+{
+  "commands": {
+    "test": "python -m pytest .claude/hooks/tests/ -v",
+    "lint": "ruff check .",
+    "format": "ruff format .",
+    "coverage": "python -m pytest .claude/hooks/tests/ --cov=.claude/hooks --cov-fail-under=60 --no-header -q",
+    "type_check": "mypy .claude/hooks/ --ignore-missing-imports --no-error-summary",
+    "regression": "python -m pytest .claude/hooks/tests/ -v --tb=short",
+    "regression_default_tier": "unit",
+    "regression_tiers": {
+      "smoke": {
+        "cmd": "python -m pytest .claude/hooks/tests/ -v --tb=short -x -q",
+        "max_duration_s": 60
+      },
+      "unit": {
+        "cmd": "python -m pytest .claude/hooks/tests/ -v --tb=short",
+        "max_duration_s": 120
+      },
+      "full": {
+        "cmd": "python -m pytest .claude/hooks/tests/ -v --tb=long",
+        "max_duration_s": 300
+      }
+    }
+  },
+  "test_patterns": [],
+  "format_timeout_seconds": 30,
+  "qa_runner": {
+    "production_scan": {
+      "enabled": true,
+      "fail_on_violation": true,
+      "exclude_patterns": ["test_*", "*_test.*"]
+    },
+    "custom_steps": []
+  },
+  "external_scanners": {
+    "bandit": {
+      "cmd": "bandit -r {changed_dir} -f json -q",
+      "enabled": true,
+      "strict_mode": false
+    },
+    "semgrep": {
+      "cmd": "semgrep --config=auto {changed_dir} --json -q",
+      "enabled": false
+    },
+    "pip-audit": {
+      "cmd": "pip-audit --format=json",
+      "enabled": true,
+      "strict_mode": false
+    }
+  },
+  "audit_modes": {
+    "quick": {
+      "sections": [1, 2, 6],
+      "description": "Fast structural check — PLAN.md completeness (1), prd.json alignment (2), hook chain health (6). No file scanning, no test tracing."
+    },
+    "delivery": {
+      "sections": [1, 2, 3, 4],
+      "description": "Production-relevant surfaces for release gating — plan (1), PRD (2), test coverage traceability (3), verification log integrity (4)."
+    },
+    "full": {
+      "sections": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "description": "Exhaustive audit — all 9 sections. Current default behavior, unchanged."
+    }
+  },
+  "languages": {
+    "python": {
+      "extensions": [".py"],
+      "test_patterns": ["test_*.py", "*_test.py"],
+      "commands": {
+        "lint": "ruff check .",
+        "type_check": "mypy .claude/hooks/ --ignore-missing-imports --no-error-summary",
+        "test": "python -m pytest .claude/hooks/tests/ -v"
+      }
+    },
+    "go": {
+      "extensions": [".go"],
+      "test_patterns": ["*_test.go"],
+      "commands": {
+        "lint": "cd services/game-server && golangci-lint run ./...",
+        "type_check": "cd services/game-server && go vet ./...",
+        "test": "cd services/game-server && go test ./... -v -race"
+      }
+    },
+    "typescript": {
+      "extensions": [".ts", ".tsx"],
+      "test_patterns": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx"],
+      "commands": {
+        "lint": "npx eslint --ext .ts,.tsx .",
+        "type_check": "npx tsc --noEmit",
+        "test": "npx vitest run"
+      }
+    },
+    "protobuf": {
+      "extensions": [".proto"],
+      "test_patterns": [],
+      "commands": {
+        "lint": "cd packages/contracts && buf lint",
+        "type_check": "cd packages/contracts && buf build",
+        "test": "echo 'No proto tests — validated by buf lint/build'"
+      }
+    }
+  }
+}
